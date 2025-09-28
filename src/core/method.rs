@@ -1,6 +1,7 @@
 use super::{Error, Sequence};
 use crate::helpers::{WithHistory, WithLastValue};
 use std::fmt;
+use std::mem::{align_of, size_of};
 
 type BoxedFnMethod<'a, M> = Box<dyn FnMut(&'a <M as Method>::Input) -> <M as Method>::Output>;
 
@@ -114,7 +115,7 @@ pub trait Method {
 	where
 		Self: Sized,
 	{
-		(std::mem::size_of::<Self>(), std::mem::align_of::<Self>())
+		(size_of::<Self>(), align_of::<Self>())
 	}
 
 	/// Iterates the `Method` over the given `inputs` slice and returns `Vec` of output values.
