@@ -217,10 +217,10 @@ pub trait Method {
 	}
 
 	/// Creates new function based on the method
-	fn new_fn(
+	fn new_fn<'a>(
 		params: Self::Params,
-		initial_value: &Self::Input,
-	) -> Result<BoxedFnMethod<Self>, Error>
+		initial_value: &'a Self::Input,
+	) -> Result<BoxedFnMethod<'a, Self>, Error>
 	where
 		Self: Sized + 'static,
 	{

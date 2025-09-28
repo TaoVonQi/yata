@@ -174,7 +174,7 @@ impl<T> Window<T> {
 	/// ```
 	#[inline]
 	#[must_use]
-	pub const fn iter(&self) -> WindowIterator<T> {
+	pub const fn iter<'a>(&'a self) -> WindowIterator<'a, T> {
 		WindowIterator::new(self)
 	}
 
@@ -197,7 +197,7 @@ impl<T> Window<T> {
 	/// ```
 	#[inline]
 	#[must_use]
-	pub const fn iter_rev(&self) -> ReversedWindowIterator<T> {
+	pub const fn iter_rev<'a>(&'a self) -> ReversedWindowIterator<'a, T> {
 		ReversedWindowIterator::new(self)
 	}
 
@@ -304,9 +304,9 @@ impl<T> std::ops::Index<PeriodType> for Window<T> {
 	type Output = T;
 
 	fn index(&self, index: PeriodType) -> &Self::Output {
-		let buf_index = self
-			.slice_index(index)
-			.unwrap_or_else(|| panic!("Window index {index} is out of range")) as usize;
+		let buf_index =
+			self.slice_index(index)
+				.unwrap_or_else(|| panic!("Window index {index} is out of range")) as usize;
 
 		if cfg!(feature = "unsafe_performance") {
 			unsafe { self.buf.get_unchecked(buf_index) }
